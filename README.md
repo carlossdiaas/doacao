@@ -1,24 +1,42 @@
-Doacao App
+:
 
-Backend: Node.js + Express + SQLite
-Frontend: Static HTML + Tailwind + JS (to host on GitHub Pages)
+🌍 App Doações
 
-Setup local (backend):
-1. Copy `.env.example` to `.env` and set JWT_SECRET
-2. npm install
-3. npm run dev
+Um aplicativo funcional de doações, onde qualquer pessoa pode cadastrar itens para doar e outros usuários podem solicitar/adotar esses itens.
+O sistema é multiusuário, com login seguro e interface moderna.
 
-Deploy:
-- Frontend: push `public/` to GitHub Pages branch (main or gh-pages)
-- Backend: deploy this repository (or `server/`) to Render or Railway. Ensure environment variables set (JWT_SECRET, PORT).
+✨ Funcionalidades
 
-API endpoints:
-- POST /register
-- POST /login
-- GET /profile (auth)
-- PUT /profile (auth)
-- GET /donations
-- POST /donations (auth)
-- POST /claim (auth)
+👤 Cadastro e Login com autenticação JWT.
 
-See code for details.
+📝 Perfil do usuário com nome, cidade e foto.
+
+🎁 Cadastro de doações (descrição, imagem, localização).
+
+🔍 Explorar doações disponíveis em tempo real.
+
+🤝 Solicitar/adotar uma doação (fica registrado no banco).
+
+📱 Interface responsiva com Tailwind.
+
+🔒 Proteção de rotas (somente usuários logados acessam o dashboard).
+
+🛠️ Tecnologias
+
+Frontend
+
+HTML5
+
+TailwindCSS
+
+JavaScript (consumindo API com fetch)
+
+Backend
+
+Node.js + Express
+
+SQLite3
+
+JWT (JSON Web Token)
+
+Bcrypt (hash de senhas)
