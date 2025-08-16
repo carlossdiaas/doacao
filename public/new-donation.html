@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nova Doação - Doações</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .form-input {
+      transition: all 0.3s ease;
+    }
+    .form-input:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+  <div class="max-w-2xl mx-auto p-4">
+    <!-- Header -->
+    <header class="gradient-bg text-white rounded-2xl p-6 mb-8 shadow-xl">
+      <div class="text-center">
+        <a href="/" class="inline-block mb-4 text-blue-100 hover:text-white transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Voltar ao Início
+        </a>
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">
+          <i class="fas fa-gift text-yellow-300 mr-3"></i>Nova Doação
+        </h1>
+        <p class="text-blue-100">Compartilhe algo que pode ajudar outras pessoas</p>
+      </div>
+    </header>
+
+    <!-- Formulário -->
+    <form id="form-donation" class="bg-white rounded-2xl shadow-xl p-8" enctype="multipart/form-data">
+      <div class="space-y-6">
+        <!-- Título -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-tag text-blue-500 mr-2"></i>Título da Doação *
+          </label>
+          <input 
+            name="title" 
+            required 
+            class="form-input w-full border-2 border-gray-200 p-4 rounded-xl focus:border-blue-500 focus:outline-none text-lg" 
+            placeholder="Ex: Livros de literatura, Roupas infantis, Móveis..."
+          />
+        </div>
+
+        <!-- Descrição -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-align-left text-green-500 mr-2"></i>Descrição
+          </label>
+          <textarea 
+            name="description" 
+            rows="4"
+            class="form-input w-full border-2 border-gray-200 p-4 rounded-xl focus:border-green-500 focus:outline-none resize-none" 
+            placeholder="Descreva o item, condição, tamanho, etc..."
+          ></textarea>
+        </div>
+
+        <!-- Cidade -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Cidade
+          </label>
+          <input 
+            name="city" 
+            class="form-input w-full border-2 border-gray-200 p-4 rounded-xl focus:border-red-500 focus:outline-none" 
+            placeholder="Sua cidade"
+          />
+        </div>
+
+        <!-- Upload de Imagem -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-camera text-purple-500 mr-2"></i>Foto do Item
+          </label>
+          <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-purple-500 transition-colors">
+            <input 
+              name="image" 
+              type="file" 
+              accept="image/*"
+              class="hidden" 
+              id="image-input"
+            />
+            <label for="image-input" class="cursor-pointer">
+              <div class="space-y-3">
+                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400"></i>
+                <div>
+                  <p class="text-lg font-semibold text-gray-700">Clique para selecionar uma imagem</p>
+                  <p class="text-sm text-gray-500">PNG, JPG até 5MB</p>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div id="image-preview" class="mt-4 hidden">
+            <img id="preview-img" class="w-full h-48 object-cover rounded-xl" />
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex gap-4 pt-4">
+          <button 
+            type="submit" 
+            class="btn-primary flex-1 py-4 px-6 text-white rounded-xl font-semibold text-lg shadow-lg"
+          >
+            <i class="fas fa-paper-plane mr-2"></i>Criar Doação
+          </button>
+          <a 
+            href="/" 
+            class="flex-1 py-4 px-6 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold text-lg text-center transition-colors"
+          >
+            <i class="fas fa-times mr-2"></i>Cancelar
+          </a>
+        </div>
+      </div>
+    </form>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl p-8 text-center">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+        <p class="text-lg font-semibold text-gray-700">Criando sua doação...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = (window.location.hostname === 'localhost') ? 'http://localhost:4000' : 'https://YOUR_BACKEND_URL';
+    
+    // Preview de imagem
+    document.getElementById('image-input').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('image-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Envio do formulário
+    document.getElementById('form-donation').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showNotification('Faça login para criar uma doação', 'warning');
+        return;
+      }
+
+      const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Mostrar loading
+      document.getElementById('loading-overlay').classList.remove('hidden');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Criando...';
+      submitBtn.disabled = true;
+
+      try {
+        const formData = new FormData(form);
+        const res = await fetch(API + '/donations', { 
+          method: 'POST', 
+          headers: { 
+            'Authorization': 'Bearer ' + token 
+          }, 
+          body: formData 
+        });
+        
+        const data = await res.json();
+        
+        if (data.donation) {
+          showNotification('Doação criada com sucesso!', 'success');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
+        } else {
+          showNotification('Erro ao criar doação: ' + (data.error || 'Erro desconhecido'), 'error');
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          document.getElementById('loading-overlay').classList.add('hidden');
+        }
+      } catch (error) {
+        showNotification('Erro ao processar solicitação', 'error');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        document.getElementById('loading-overlay').classList.add('hidden');
+      }
+    });
+
+    // Função para mostrar notificações
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full`;
+      
+      const colors = {
+        success: 'bg-green-500 text-white',
+        error: 'bg-red-500 text-white',
+        warning: 'bg-yellow-500 text-white',
+        info: 'bg-blue-500 text-white'
+      };
+      
+      notification.className += ` ${colors[type]}`;
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} mr-3"></i>
+          <span>${message}</span>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-4 hover:opacity-75">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+      
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => notification.remove(), 300);
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

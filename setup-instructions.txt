@@ -1,0 +1,10 @@
+Local quick start (Windows PowerShell):
+
+# copy .env
+copy .env.example .env
+# install
+npm install
+# run dev
+npm run dev
+
+Then open http://localhost:4000/public/
