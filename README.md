@@ -1,24 +1,81 @@
-Doacao App
+🤝 Doação App
+
+Aplicação web funcional para gerenciamento de doações e adoções.
+Permite que múltiplos usuários se cadastrem, façam login, registrem doações com foto/descrição/localização e que outras pessoas possam reivindicar essas doações.
+
+⚙️ Stack Tecnológica
 
 Backend: Node.js + Express + SQLite
-Frontend: Static HTML + Tailwind + JS (to host on GitHub Pages)
 
-Setup local (backend):
-1. Copy `.env.example` to `.env` and set JWT_SECRET
-2. npm install
-3. npm run dev
+Frontend: HTML + TailwindCSS + JavaScript (estático, ideal para GitHub Pages)
 
-Deploy:
-- Frontend: push `public/` to GitHub Pages branch (main or gh-pages)
-- Backend: deploy this repository (or `server/`) to Render or Railway. Ensure environment variables set (JWT_SECRET, PORT).
+🖥️ Setup Local (Backend)
 
-API endpoints:
-- POST /register
-- POST /login
-- GET /profile (auth)
-- PUT /profile (auth)
-- GET /donations
-- POST /donations (auth)
-- POST /claim (auth)
+Clone o repositório
 
-See code for details.
+git clone https://github.com/usuario/doacao-app.git
+cd doacao-app
+
+
+Copie .env.example para .env e configure:
+
+JWT_SECRET=sua_chave_segura
+PORT=3000
+
+
+Instale as dependências
+
+npm install
+
+
+Rode o servidor em modo dev
+
+npm run dev
+
+🚀 Deploy
+Frontend
+
+Publique a pasta public/ no GitHub Pages
+
+via branch main ou gh-pages.
+
+Backend
+
+Faça deploy deste repositório (ou da pasta server/) no Render ou Railway.
+
+Configure as variáveis de ambiente:
+
+JWT_SECRET
+
+PORT
+
+⚠️ Certifique-se de que o diretório uploads/ seja persistente ou altere para usar S3/Cloud Storage.
+
+📡 API Endpoints
+Autenticação
+
+POST /register → criar usuário
+
+POST /login → autenticar usuário
+
+Usuário
+
+GET /profile (auth) → obter perfil
+
+PUT /profile (auth) → atualizar perfil
+
+Doações
+
+GET /donations → listar todas doações
+
+POST /donations (auth) → criar nova doação
+
+POST /claim (auth) → reivindicar doação
+
+✅ Observações
+
+Use um JWT_SECRET forte em produção.
+
+Render/Railway já fornecem HTTPS automaticamente.
+
+Para uploads confiáveis em produção, considere Amazon S3, Supabase Storage ou similar.
